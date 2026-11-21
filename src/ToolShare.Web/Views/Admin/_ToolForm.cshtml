@@ -1,0 +1,7 @@
+@model ToolVm
+<form method="post" class="form" asp-action="@(Model.Id == 0 ? "AddTool" : "Edit")" asp-route-id="@(Model.Id == 0 ? null : Model.Id)" novalidate>
+  <div class="field"><label for="name">Tool name</label><input id="name" name="name" value="@Model.Name" required></div>
+  <div class="field"><label for="category">Category</label><input id="category" name="category" value="@Model.Category" aria-describedby="cat-hint"><p id="cat-hint" class="hint">For example: Power tools, Garden or Cleaning.</p></div>
+  <div class="field"><label for="description">Description</label><textarea id="description" name="description" rows="3">@Model.Description</textarea></div>
+  <button class="btn">@(Model.Id == 0 ? "Add tool" : "Save changes")</button>
+</form>

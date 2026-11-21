@@ -1,0 +1,36 @@
+@{
+  var c = ViewContext.RouteData.Values["controller"]?.ToString(); var a = ViewContext.RouteData.Values["action"]?.ToString();
+  var role = Context.Session.GetString("Role"); var who = Context.Session.GetString("Name");
+  string? Cur(string ctl, string act) => c == ctl && a == act ? "page" : null;
+  var ok = TempData["Ok"] as string; var err = (TempData["Error"] as string) ?? (ViewBag.Error as string);
+}
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark">
+<title>@ViewData["Title"] | ToolShare</title><link rel="stylesheet" href="~/css/site.css" asp-append-version="true"></head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<header class="site"><div class="wrap bar">
+  <a class="brand" asp-controller="Tools" asp-action="Index">ToolShare</a>
+  <nav aria-label="Main"><ul>
+  @if (role != null) {
+    <li><a asp-controller="Tools" asp-action="Index" aria-current="@Cur("Tools", "Index")">Browse tools</a></li>
+    <li><a asp-controller="Loans" asp-action="Mine" aria-current="@Cur("Loans", "Mine")">My loans</a></li>
+    if (role == "Admin") {
+      <li><a asp-controller="Admin" asp-action="Tools" aria-current="@Cur("Admin", "Tools")">Manage tools</a></li>
+      <li><a asp-controller="Admin" asp-action="Loans" aria-current="@Cur("Admin", "Loans")">All loans</a></li>
+    }
+    <li class="who">Signed in as @who (@role)</li>
+    <li><form asp-controller="Account" asp-action="Logout" method="post"><button class="linkbtn">Sign out</button></form></li>
+  } else {
+    <li><a asp-controller="Account" asp-action="Login" aria-current="@Cur("Account", "Login")">Sign in</a></li>
+    <li><a asp-controller="Account" asp-action="Register" aria-current="@Cur("Account", "Register")">Create account</a></li>
+  }
+  </ul></nav>
+</div></header>
+<main id="main" tabindex="-1" class="wrap">
+  @if (ok != null) { <p class="notice ok" role="status">@ok</p> }
+  @if (err != null) { <p class="notice bad" role="alert">@err</p> }
+  @RenderBody()
+</main>
+<footer class="wrap"><p>ToolShare, a community tool library. <a asp-controller="Home" asp-action="Accessibility">Accessibility statement</a></p></footer>
+</body></html>

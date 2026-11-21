@@ -1,0 +1,14 @@
+@model List<ToolVm>
+@{ ViewData["Title"] = "Manage tools"; }
+<h1 id="h">Manage tools</h1>
+<section aria-labelledby="add"><h2 id="add">Add a tool</h2><partial name="_ToolForm" model="new ToolVm { Id = 0 }" /></section>
+<section aria-labelledby="all"><h2 id="all">All tools</h2>
+@if (!Model.Any()) { <p class="empty">The library has no tools yet. Add the first one above.</p> } else {
+<div class="table-wrap" role="region" aria-labelledby="all" tabindex="0">
+<table><caption class="sr">Tools in the library</caption>
+<thead><tr><th scope="col">Tool</th><th scope="col">Category</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+<tbody>@foreach (var t in Model) {
+  <tr><th scope="row">@t.Name</th><td>@t.Category</td><td><span class="status @(t.IsAvailable ? "ok" : "off")">@(t.IsAvailable ? "Available" : "On loan")</span></td>
+  <td class="actions"><a class="btn small secondary" asp-action="Edit" asp-route-id="@t.Id" aria-label="Edit @t.Name">Edit</a> <a class="btn small danger" asp-action="ConfirmDelete" asp-route-id="@t.Id" aria-label="Delete @t.Name">Delete</a></td></tr> }
+</tbody></table></div> }
+</section>

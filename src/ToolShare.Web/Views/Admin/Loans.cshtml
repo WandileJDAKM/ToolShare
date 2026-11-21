@@ -1,0 +1,12 @@
+@model List<LoanVm>
+@{ ViewData["Title"] = "All loans"; bool od = ViewBag.Overdue == true; }
+<h1 id="h">All loans</h1>
+<nav aria-label="Loan filter" class="tabs"><a asp-action="Loans" aria-current="@(od ? null : "page")">All loans</a> <a asp-action="Loans" asp-route-overdue="true" aria-current="@(od ? "page" : null)">Overdue only</a></nav>
+@if (!Model.Any()) { <p class="empty">@(od ? "Nothing is overdue." : "No loans yet.")</p> } else {
+<div class="table-wrap" role="region" aria-labelledby="h" tabindex="0">
+<table><caption class="sr">@(od ? "Overdue loans" : "All loans")</caption>
+<thead><tr><th scope="col">Tool</th><th scope="col">Member</th><th scope="col">Borrowed</th><th scope="col">Due</th><th scope="col">Status</th></tr></thead>
+<tbody>@foreach (var l in Model) {
+  <tr><th scope="row">@l.Tool</th><td>@l.Member</td><td>@l.BorrowedAt.ToString("d MMM yyyy")</td><td>@l.DueDate.ToString("d MMM yyyy")</td>
+  <td>@if (l.ReturnedAt != null) { <span class="status off">Returned</span> } else if (l.Overdue) { <span class="status bad">Overdue</span> } else { <span class="status ok">On loan</span> }</td></tr> }
+</tbody></table></div> }

@@ -1,0 +1,11 @@
+@{ ViewData["Title"] = "Create account"; }
+<h1>Create an account</h1>
+<p>The first person to create an account becomes the library administrator. Everyone else joins as a member.</p>
+<form method="post" class="form" novalidate>
+  <div class="field"><label for="name">Full name</label><input id="name" name="name" autocomplete="name" value="@(ViewBag.Name as string)" required></div>
+  <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" value="@(ViewBag.Email as string)" required></div>
+  <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="new-password" minlength="8" aria-describedby="pw-hint" required>
+    <p id="pw-hint" class="hint">At least 8 characters. A short phrase is easy to remember and hard to guess.</p></div>
+  <button class="btn">Create account</button>
+</form>
+<p>Already have an account? <a asp-action="Login">Sign in</a>.</p>

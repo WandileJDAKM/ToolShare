@@ -1,0 +1,14 @@
+@model List<LoanVm>
+@{ ViewData["Title"] = "My loans"; }
+<h1 id="h">My loans</h1>
+@if (!Model.Any()) { <p class="empty">You have not borrowed anything yet. <a asp-controller="Tools" asp-action="Index">Browse tools</a>.</p> } else {
+<div class="table-wrap" role="region" aria-labelledby="h" tabindex="0">
+<table><caption class="sr">Your borrowed tools</caption>
+<thead><tr><th scope="col">Tool</th><th scope="col">Borrowed</th><th scope="col">Due</th><th scope="col">Status</th><th scope="col">Action</th></tr></thead>
+<tbody>
+@foreach (var l in Model) {
+  <tr><th scope="row">@l.Tool</th><td><time datetime="@l.BorrowedAt.ToString("yyyy-MM-dd")">@l.BorrowedAt.ToString("d MMM yyyy")</time></td><td><time datetime="@l.DueDate.ToString("yyyy-MM-dd")">@l.DueDate.ToString("d MMM yyyy")</time></td>
+  <td>@if (l.ReturnedAt != null) { <span class="status off">Returned @l.ReturnedAt.Value.ToString("d MMM yyyy")</span> } else if (l.Overdue) { <span class="status bad">Overdue</span> } else { <span class="status ok">On loan</span> }</td>
+  <td>@if (l.ReturnedAt == null) { <form method="post" asp-action="Return"><input type="hidden" name="id" value="@l.Id"><input type="hidden" name="name" value="@l.Tool"><button class="btn small" aria-label="Return @l.Tool">Return</button></form> }</td></tr>
+}
+</tbody></table></div> }

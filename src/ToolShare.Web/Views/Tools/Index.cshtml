@@ -1,0 +1,26 @@
+@model List<ToolVm>
+@{ ViewData["Title"] = "Browse tools"; var search = ViewBag.Search as string; bool only = ViewBag.OnlyAvailable == true; }
+<h1>Browse tools</h1>
+<form method="get" class="filters" role="search" aria-label="Search tools">
+  <div class="field"><label for="search">Search by name or category</label><input id="search" name="search" type="search" value="@search" autocomplete="off"></div>
+  <div class="check"><input id="avail" name="available" type="checkbox" value="true" checked="@only"><label for="avail">Show only available tools</label></div>
+  <button class="btn">Search</button>
+</form>
+<p class="muted" aria-live="polite">@Model.Count @(Model.Count == 1 ? "tool" : "tools") found.</p>
+@if (!Model.Any()) { <p class="empty">No tools match your search. Try a different word or clear the filter.</p> }
+<ul class="cards">
+@foreach (var t in Model) {
+  <li><article class="card" aria-labelledby="t@(t.Id)">
+    <h2 id="t@(t.Id)">@t.Name</h2><p class="muted">@t.Category</p><p>@t.Description</p>
+    @if (t.IsAvailable) {
+      <p><span class="status ok">Available</span></p>
+      <form method="post" asp-controller="Tools" asp-action="Borrow" class="borrow">
+        <input type="hidden" name="id" value="@t.Id"><input type="hidden" name="name" value="@t.Name">
+        <div class="field"><label for="d@(t.Id)">Days to borrow</label>
+          <select id="d@(t.Id)" name="days">@foreach (var n in new[] { 1, 3, 7, 14, 21, 30 }) { <option value="@n" selected="@(n == 7)">@n @(n == 1 ? "day" : "days")</option> }</select></div>
+        <button class="btn" aria-label="Borrow @t.Name">Borrow</button>
+      </form>
+    } else { <p><span class="status off">On loan</span></p> }
+  </article></li>
+}
+</ul>

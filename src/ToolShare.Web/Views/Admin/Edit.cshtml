@@ -1,0 +1,5 @@
+@model ToolVm
+@{ ViewData["Title"] = "Edit " + Model.Name; }
+<h1>Edit @Model.Name</h1>
+<partial name="_ToolForm" model="Model" />
+<p><a asp-action="Tools">Back to all tools</a></p>

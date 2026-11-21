@@ -1,0 +1,5 @@
+@model ToolVm
+@{ ViewData["Title"] = "Delete " + Model.Name; }
+<h1>Delete @Model.Name?</h1>
+<p>This removes the tool from the library. A tool that has been lent out before cannot be deleted.</p>
+<form method="post" asp-action="Delete" asp-route-id="@Model.Id"><button class="btn danger">Yes, delete @Model.Name</button> <a class="btn secondary" asp-action="Tools">Cancel</a></form>
